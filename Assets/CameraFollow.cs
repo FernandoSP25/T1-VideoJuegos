@@ -9,14 +9,25 @@ public class CameraFollow : MonoBehaviour
 
     void Start()
     {
-        offset = transform.position - playerTransform.position;
+        if (playerTransform == null)
+        {
+            GameObject ninjaObj = GameObject.FindWithTag("Player");
+            if (ninjaObj != null)
+            {
+                playerTransform = ninjaObj.transform;
+                offset = transform.position - playerTransform.position;
+            }
+        }
     }
+
 
     void LateUpdate()
     {
-        // Seguimiento solo en el eje X
-        Vector3 targetPosition = new Vector3(playerTransform.position.x + offset.x, transform.position.y, transform.position.z);
-        
-        transform.position = Vector3.Lerp(transform.position, targetPosition, smoothing * Time.deltaTime);
+        if (playerTransform != null)
+        {
+            // Seguimiento solo en el eje X
+            Vector3 targetPosition = new Vector3(playerTransform.position.x + offset.x, transform.position.y, transform.position.z);
+            transform.position = Vector3.Lerp(transform.position, targetPosition, smoothing * Time.deltaTime);
+        }
     }
 }
